@@ -1,0 +1,31 @@
+<div class="widget">
+  <h2>Tax Lens Assistant</h2>
+  <div class="controls">
+    <label>Company</label>
+    <select [(ngModel)]="selectedCompany">
+      <option *ngFor="let company of companies" [value]="company">{{ company }}</option>
+    </select>
+
+    <label>Compare to State (optional)</label>
+    <input [(ngModel)]="compareState" placeholder="e.g. TX" maxlength="2" />
+  </div>
+
+  <div class="chat-box">
+    <div *ngFor="let m of messages" [class.user]="m.role === 'user'" class="message">
+      <strong>{{ m.role === 'user' ? 'You' : 'Assistant' }}:</strong> {{ m.content }}
+    </div>
+  </div>
+
+  <div class="composer">
+    <textarea [(ngModel)]="question" rows="3" placeholder="Ask: Why is tax high? What if moved from CA to TX?"></textarea>
+    <button (click)="send()" [disabled]="loading">{{ loading ? 'Thinking...' : 'Send' }}</button>
+  </div>
+
+  <div class="metrics" *ngIf="latestComputation">
+    <h3>Latest Deterministic Calculation</h3>
+    <p>Federal Tax: {{ latestComputation.federal_tax_after_credits | currency }}</p>
+    <p>State Tax: {{ latestComputation.state_tax | currency }}</p>
+    <p>Total Tax: {{ latestComputation.total_tax | currency }}</p>
+    <p>Effective Rate: {{ latestComputation.effective_tax_rate_percent }}%</p>
+  </div>
+</div>
